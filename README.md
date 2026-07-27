@@ -20,17 +20,12 @@ This repository provides a highly structured, statistically rigorous pipeline ac
 
 ```text
 CGM-Preprocessing-Impact/
-├── data/
-│   ├── raw/                 # Place raw OhioT1DM XML files here
-│   └── processed/           # Contains imputed/smoothed hupa_smoothed.csv
 ├── notebooks/
 │   └── Kaggle_Training_Pipeline.ipynb # One-click Kaggle GPU script
-├── paper/                   # Complete LaTeX manuscript & figures
-├── src/                     
-│   ├── pipeline/            # Data loading, imputation, smoothing, features
-│   ├── models/              # XGBoost, 1D-CNN, Transformer architectures
-│   └── analysis/            # Multi-seed stats, Friedman/Nemenyi, plotting
-└── results/                 # Auto-generated CSVs and performance plots
+└── src/                     
+    ├── pipeline/            # data_loader.py, imputation.py, smoothing.py
+    ├── models/              # xgboost_model.py, cnn_model.py, transformer_model.py
+    └── analysis/            # statistical_analysis.py, clinical_evaluation.py
 ```
 
 ## ⚙️ Pipeline Overview
@@ -66,20 +61,22 @@ pip install -r requirements.txt
 ```
 
 ### 2. Dataset Preparation
-This project uses the [OhioT1DM Dataset](https://ohiot1dm.ohio.edu/). Due to data use agreements, the raw data cannot be distributed in this repository.
-1. Request access to the dataset.
-2. Place the raw XML files in the `data/raw/` directory.
+This project uses two datasets: the [OhioT1DM Dataset](https://ohiot1dm.ohio.edu/) (12 patients) and the **HUPA-UCM Dataset** (25 patients). 
+
+Due to data use agreements and privacy regulations, the raw data cannot be distributed in this repository.
+1. Request access to the respective datasets via their official portals.
+2. Place the raw data files in a local `data/raw/` directory (ignored by git).
 3. Run the data pipeline to generate the preprocessed dataset:
 ```bash
-python src/pipeline/step1_load_data.py
-python src/pipeline/step2_imputation.py
-python src/pipeline/step3_smoothing.py
+python src/pipeline/data_loader.py
+python src/pipeline/imputation.py
+python src/pipeline/smoothing.py
 ```
 
 ### 3. Training & Evaluation
 To run the full multi-seed evaluation pipeline locally (Warning: CPU training for Transformers takes ~8 hours):
 ```bash
-python src/analysis/step_statistics.py
+python src/analysis/statistical_analysis.py
 ```
 
 **🔥 Fast GPU Execution via Kaggle**
